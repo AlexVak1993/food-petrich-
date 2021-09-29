@@ -125,14 +125,14 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  const modalTimerId = setTimeout(openModal, 50000);
+  // const modalTimerId = setTimeout(openModal, 50000);
 
   function showModalByScroll() {
     if (
       window.pageYOffset + document.documentElement.clientHeight >=
       document.documentElement.scrollHeight
     ) {
-      openModal();
+      // openModal();
 
       window.removeEventListener('scroll', showModalByScroll);
     }
@@ -191,13 +191,19 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     return await res.json();
-  }
+  };
 
-  getResource('http://localhost:3000/menu').then(data => {
-    data.forEach(({img, altimg, title, descr, price}) => {
-      new MenuCard(img, altimg, title, descr, price, '.menu .container').render()
-    })
-  })
+  // getResource('http://localhost:3000/menu').then(data => {
+  //   data.forEach(({img, altimg, title, descr, price}) => {
+  //     new MenuCard(img, altimg, title, descr, price, '.menu .container').render()
+  //   })
+  // })
+
+  axios.get('http://localhost:3000/menu').then((data) => {
+    data.data.forEach(({img, altimg, title, descr, price}) => {
+        new MenuCard(img, altimg, title, descr, price, '.menu .container').render()
+      })
+  });
 
   // Forms
   const forms = document.querySelectorAll('form');
@@ -222,7 +228,7 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 
     return await res.json();
-  }
+  };
 
   function bindPostData(form) {
     form.addEventListener('submit', (e) => {
