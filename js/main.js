@@ -1,33 +1,33 @@
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener('DOMContentLoaded', () => {
   //tabs
-  const tabs = document.querySelectorAll(".tabheader__item"),
-    tabsContent = document.querySelectorAll(".tabcontent"),
-    tabsParent = document.querySelector(".tabheader__items");
+  const tabs = document.querySelectorAll('.tabheader__item'),
+    tabsContent = document.querySelectorAll('.tabcontent'),
+    tabsParent = document.querySelector('.tabheader__items');
 
   function hideTabContent() {
     tabsContent.forEach((item) => {
-      item.classList.add("hide");
-      item.classList.remove("show", "fade");
+      item.classList.add('hide');
+      item.classList.remove('show', 'fade');
     });
 
     tabs.forEach((item) => {
-      item.classList.remove("tabheader__item_active");
+      item.classList.remove('tabheader__item_active');
     });
   }
 
   function showTabContent(i = 0) {
-    tabsContent[i].classList.add("show", "fade");
-    tabsContent[i].classList.remove("hide");
-    tabs[i].classList.add("tabheader__item_active");
+    tabsContent[i].classList.add('show', 'fade');
+    tabsContent[i].classList.remove('hide');
+    tabs[i].classList.add('tabheader__item_active');
   }
 
   hideTabContent();
   showTabContent();
 
-  tabsParent.addEventListener("click", (e) => {
+  tabsParent.addEventListener('click', (e) => {
     const target = e.target;
 
-    if (target && target.classList.contains("tabheader__item")) {
+    if (target && target.classList.contains('tabheader__item')) {
       tabs.forEach((item, i) => {
         if (target == item) {
           hideTabContent();
@@ -39,7 +39,7 @@ window.addEventListener("DOMContentLoaded", () => {
   //tabs
 
   //timer
-  const deadline = "2022-05-11";
+  const deadline = '2022-05-11';
 
   function getTimeRemaining(endtime) {
     const t = Date.parse(endtime) - Date.parse(new Date()),
@@ -67,10 +67,10 @@ window.addEventListener("DOMContentLoaded", () => {
 
   function setClock(selector, endtime) {
     const timer = document.querySelector(selector),
-      days = timer.querySelector("#days"),
-      hours = timer.querySelector("#hours"),
-      minutes = timer.querySelector("#minutes"),
-      seconds = timer.querySelector("#seconds"),
+      days = timer.querySelector('#days'),
+      hours = timer.querySelector('#hours'),
+      minutes = timer.querySelector('#minutes'),
+      seconds = timer.querySelector('#seconds'),
       timeInterval = setInterval(updateClock, 1000);
 
     updateClock();
@@ -89,38 +89,38 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  setClock(".timer", deadline);
+  setClock('.timer', deadline);
   // timer
 
   // modal
-  const modalTrigger = document.querySelectorAll("[data-modal]"),
-    modal = document.querySelector(".modal");
+  const modalTrigger = document.querySelectorAll('[data-modal]'),
+    modal = document.querySelector('.modal');
 
   function closeModal() {
-    modal.classList.add("hide");
-    modal.classList.remove("show");
-    document.body.style.overflow = "";
+    modal.classList.add('hide');
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
   }
 
   function openModal() {
-    modal.classList.add("show");
-    modal.classList.remove("hide");
-    document.body.style.overflow = "hidden";
+    modal.classList.add('show');
+    modal.classList.remove('hide');
+    document.body.style.overflow = 'hidden';
     // clearInterval(modalTimerId);
   }
 
   modalTrigger.forEach((trigger) => {
-    trigger.addEventListener("click", openModal);
+    trigger.addEventListener('click', openModal);
   });
 
-  modal.addEventListener("click", (e) => {
+  modal.addEventListener('click', (e) => {
     if (e.target === modal || e.target.getAttribute('data-close') == '') {
       closeModal();
     }
   });
 
-  document.addEventListener("keydown", (e) => {
-    if (e.code === "Escape" && modal.classList.contains("show")) {
+  document.addEventListener('keydown', (e) => {
+    if (e.code === 'Escape' && modal.classList.contains('show')) {
       closeModal();
     }
   });
@@ -134,11 +134,11 @@ window.addEventListener("DOMContentLoaded", () => {
     ) {
       openModal();
 
-      window.removeEventListener("scroll", showModalByScroll);
+      window.removeEventListener('scroll', showModalByScroll);
     }
   }
 
-  window.addEventListener("scroll", showModalByScroll);
+  window.addEventListener('scroll', showModalByScroll);
   // modal
 
   // class for cards
@@ -160,11 +160,11 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     render() {
-      const element = document.createElement("div");
+      const element = document.createElement('div');
 
       if (this.classes.length === 0) {
         this.element = 'menu__item';
-        element.classList.add(this.element)
+        element.classList.add(this.element);
       } else {
         this.classes.forEach((className) => element.classList.add(className));
       }
@@ -183,35 +183,21 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  new MenuCard(
-    "img/tabs/vegy.jpg",
-    "vegy",
-    'Меню "Фитнес"',
-    'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
-    9,
-    ".menu .container",
-    "menu__item",
-    "big"
-  ).render();
+  const getResource = async (url) => {
+    const res = await fetch(url);
 
-  new MenuCard(
-    "img/tabs/elite.jpg",
-    "elite",
-    "Меню “Премиум”",
-    'Меню "В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
-    18,
-    ".menu .container",
-  ).render();
+    if (!res.ok) {
+      throw new Error(`Could not fetch ${url}, status: ${res.status}`);
+    }
 
-  new MenuCard(
-    "img/tabs/post.jpg",
-    "post",
-    'Меню "Постное"',
-    "Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.",
-    15,
-    ".menu .container",
-    "menu__item"
-  ).render();
+    return await res.json();
+  }
+
+  getResource('http://localhost:3000/menu').then(data => {
+    data.forEach(({img, altimg, title, descr, price}) => {
+      new MenuCard(img, altimg, title, descr, price, '.menu .container').render()
+    })
+  })
 
   // Forms
   const forms = document.querySelectorAll('form');
@@ -219,14 +205,26 @@ window.addEventListener("DOMContentLoaded", () => {
   const message = {
     loading: 'img/form/spinner.svg',
     success: 'Thanks, we will contact to you',
-    failure: 'Something wrong...'
+    failure: 'Something wrong...',
+  };
+
+  forms.forEach((item) => {
+    bindPostData(item);
+  });
+
+  const postData = async (url, data) => {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+      },
+      body: data,
+    });
+
+    return await res.json();
   }
 
-  forms.forEach(item => {
-    postData(item);
-  })
-
-  function postData(form) {
+  function bindPostData(form) {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
 
@@ -236,34 +234,25 @@ window.addEventListener("DOMContentLoaded", () => {
         display:block;
         margin: 0 auto;
       `;
-      form.insertAdjacentElement('afterend', statusMessage)
+      form.insertAdjacentElement('afterend', statusMessage);
 
-      const request = new XMLHttpRequest();
-      request.open('POST', 'server.php');
-
-      request.setRequestHeader('Content-type', 'application/json')
       const formData = new FormData(form);
 
-      const object = {}
-      formData.forEach(function(value, key) {
-        object[key] = value;
-      })
+      const json = JSON.stringify(Object.fromEntries(formData.entries()));
 
-      const json = JSON.stringify(object)
-
-      request.send(json);
-
-      request.addEventListener('load', () => {
-        if (request.status === 200) {
-          console.log(request.response);
+      postData('http://localhost:3000/requests', json)
+        .then((data) => {
+          console.log(data);
           showThanksModal(message.success);
-          form.reset();
-          statusMessage.remove()
-        } else {
+          statusMessage.remove();
+        })
+        .catch(() => {
           showThanksModal(message.failure);
-        }
-      })
-    })
+        })
+        .finally(() => {
+          form.reset();
+        });
+    });
   }
 
   function showThanksModal(message) {
@@ -289,4 +278,8 @@ window.addEventListener("DOMContentLoaded", () => {
       closeModal();
     }, 4000);
   }
+
+  fetch('http://localhost:3000/menu')
+    .then((data) => data.json())
+    .then((res) => console.log(res));
 });
