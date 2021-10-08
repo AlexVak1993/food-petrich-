@@ -1,6 +1,167 @@
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./js/modules/cards.js":
+/*!*****************************!*\
+  !*** ./js/modules/cards.js ***!
+  \*****************************/
+/***/ ((module) => {
+
+function cards() {
+
+  // class for cards
+  class MenuCard {
+    constructor(src, alt, title, desc, price, parentSelector, ...classes) {
+      this.src = src;
+      this.alt = alt;
+      this.title = title;
+      this.desc = desc;
+      this.price = price;
+      this.classes = classes;
+      this.transfer = 27;
+      this.changeToUAH();
+      this.parent = document.querySelector(parentSelector);
+    }
+
+    changeToUAH() {
+      this.price = this.price * this.transfer;
+    }
+
+    render() {
+      const element = document.createElement('div');
+
+      if (this.classes.length === 0) {
+        this.element = 'menu__item';
+        element.classList.add(this.element);
+      } else {
+        this.classes.forEach((className) => element.classList.add(className));
+      }
+
+      element.innerHTML = `
+					<img src=${this.src} alt=${this.alt}>
+					<h3 class="menu__item-subtitle">${this.title}</h3>
+					<div class="menu__item-descr">${this.desc}</div>
+					<div class="menu__item-divider"></div>
+					<div class="menu__item-price">
+						<div class="menu__item-cost">Цена:</div>
+						<div class="menu__item-total"><span>${this.price}</span> грн/день</div>
+					</div>`;
+
+      this.parent.append(element);
+    }
+  }
+
+  const getResource = async (url) => {
+    const res = await fetch(url);
+
+    if (!res.ok) {
+      throw new Error(`Could not fetch ${url}, status: ${res.status}`);
+    }
+
+    return await res.json();
+  };
+
+  // getResource('http://localhost:3000/menu').then(data => {
+  //   data.forEach(({img, altimg, title, descr, price}) => {
+  //     new MenuCard(img, altimg, title, descr, price, '.menu .container').render()
+  //   })
+  // })
+
+  axios.get('http://localhost:3000/menu').then((data) => {
+    data.data.forEach(({img, altimg, title, descr, price}) => {
+        new MenuCard(img, altimg, title, descr, price, '.menu .container').render()
+      })
+  });
+}
+
+module.exports = cards;
+
+/***/ }),
+
+/***/ "./js/modules/tabs.js":
+/*!****************************!*\
+  !*** ./js/modules/tabs.js ***!
+  \****************************/
+/***/ ((module) => {
+
+function tabs() {
+  const tabs = document.querySelectorAll('.tabheader__item'),
+    tabsContent = document.querySelectorAll('.tabcontent'),
+    tabsParent = document.querySelector('.tabheader__items');
+
+  function hideTabContent() {
+    tabsContent.forEach((item) => {
+      item.classList.add('hide');
+      item.classList.remove('show', 'fade');
+    });
+
+    tabs.forEach((item) => {
+      item.classList.remove('tabheader__item_active');
+    });
+  }
+
+  function showTabContent(i = 0) {
+    tabsContent[i].classList.add('show', 'fade');
+    tabsContent[i].classList.remove('hide');
+    tabs[i].classList.add('tabheader__item_active');
+  }
+
+  hideTabContent();
+  showTabContent();
+
+  tabsParent.addEventListener('click', (e) => {
+    const target = e.target;
+
+    if (target && target.classList.contains('tabheader__item')) {
+      tabs.forEach((item, i) => {
+        if (target == item) {
+          hideTabContent();
+          showTabContent(i);
+        }
+      });
+    }
+  });
+}
+
+module.exports = tabs;
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		if(__webpack_module_cache__[moduleId]) {
+/******/ 			return __webpack_module_cache__[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
+/*!********************!*\
+  !*** ./js/main.js ***!
+  \********************/
 window.addEventListener('DOMContentLoaded', () => {
-  const tabs = require('./modules/tabs');
-  const cards = require('./modules/cards')
+  const tabs = __webpack_require__(/*! ./modules/tabs */ "./js/modules/tabs.js");
+  const cards = __webpack_require__(/*! ./modules/cards */ "./js/modules/cards.js")
 
   tabs();
   cards()
@@ -427,3 +588,9 @@ window.addEventListener('DOMContentLoaded', () => {
   getDynamicInfo('#age')
   //calculator end
 });
+
+})();
+
+/******/ })()
+;
+//# sourceMappingURL=bundle.js.map
